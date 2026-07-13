@@ -861,8 +861,8 @@
 /* Tablets (max 768px) */
 @media (max-width: 768px) {
   section { padding: 70px 5%; }
-  nav { padding: 14px 5%; flex-wrap: wrap; gap: 10px; }
-  .nav-right { gap: 12px; margin-left: auto; }
+  nav { padding: 14px 5%; flex-wrap: nowrap; gap: 10px; position: fixed; }
+  .nav-right { gap: 12px; margin-left: auto; position: relative; }
   .nav-socials-desktop { display: none; }
   .nav-socials-mobile {
     display: flex;
@@ -876,12 +876,19 @@
   .nav-links {
     display: none;
     flex-direction: column;
-    width: 100%;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 240px;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 12px;
     gap: 4px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    z-index: 150;
   }
   .hero-photo-wrap {
   position: relative;
@@ -1124,7 +1131,7 @@
               <circle class="ring-fg" cx="36" cy="36" r="31.2" data-offset="36.05"/>
             </svg>
             <div class="edu-score-label">
-              <span class="edu-score-num">8.16</span>
+              <span class="edu-score-num">8.12</span>
               <span class="edu-score-unit">CGPA</span>
             </div>
           </div>
