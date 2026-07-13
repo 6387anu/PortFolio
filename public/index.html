@@ -327,6 +327,8 @@
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
+    width: 100%;
+    max-width: 100%;
 
   }
   .project-card:hover {
@@ -334,17 +336,22 @@
     box-shadow: 0 20px 60px rgba(0,0,0,0.4);
   }
   .project-thumb {
-    height: 180px;
     position: relative;
     overflow: hidden;
+    line-height: 0;
   }
   .project-thumb-inner {
-    width: 100%; height: 100%;
+    width: 100%;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-head);
     font-size: 3rem;
     font-weight: 800;
     transition: transform 0.4s;
+  }
+  .project-thumb-inner img{
+    width: 100%;
+    height: auto;
+    display: block;
   }
   .project-card:hover .project-thumb-inner { transform: scale(1.05); }
   .p1 .project-thumb-inner { background: linear-gradient(135deg, #ff3cac22, #784ba044); color: var(--accent1); }
@@ -383,7 +390,7 @@
     padding: 3px 8px;
     border-radius: 4px;
   }
-  .project-links { display: flex; gap: 12px; }
+  .project-links { display: flex; gap: 12px; flex-wrap: wrap; }
   .project-link {
     font-family: var(--font-mono);
     font-size: 0.72rem;
@@ -469,6 +476,7 @@
     border: 1px solid var(--border);
     border-radius: 8px;
     transition: border-color 0.3s, color 0.3s;
+    word-break: break-word;
   }
   .social-link:hover { border-color: var(--accent1); color: var(--text); }
   .social-icon {
@@ -476,6 +484,7 @@
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     font-size: 1rem;
+    flex-shrink: 0;
   }
   .contact-form { display: flex; flex-direction: column; gap: 16px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -499,6 +508,7 @@
     transition: border-color 0.3s;
     resize: none;
     cursor: text;
+    width: 100%;
   }
   .form-group input:focus, .form-group textarea:focus {
     border-color: var(--accent1);
@@ -667,57 +677,119 @@
   .video-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 2px; }
   .video-note { font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted); opacity: 0.5; text-align: center; }
 
-  /* EDUCATION */
-  #education { }
-  .edu-timeline { display: flex; flex-direction: column; gap: 20px; max-width: 1500px; }
-  .edu-card {
+  /* EDUCATION — vertical timeline with score rings */
+  #education { position: relative; }
+  .edu-timeline {
+    position: relative;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .edu-rail {
+    position: absolute;
+    left: 39px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent1) 0%, var(--accent2) 45%, var(--accent3) 80%, transparent 100%);
+    opacity: 0.55;
+  }
+  .edu-node {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    padding-bottom: 40px;
+  }
+  .edu-node:last-child { padding-bottom: 0; }
+  .edu-node-marker {
+    position: relative;
+    flex-shrink: 0;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    padding: 3px;
+    background: var(--gradient);
+    z-index: 1;
+  }
+  .edu-node-marker-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--bg);
+    background: var(--surface);
+  }
+  .edu-node-marker-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .edu-node-tier {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .edu-node-card {
+    flex: 1;
+    min-width: 0;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 28px 32px;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0 24px;
-    align-items: center;
+    border-radius: 16px;
+    padding: 26px 28px;
     position: relative;
-    overflow: hidden;
-    transition: transform 0.3s, border-color 0.3s;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
   }
-  .edu-card::before {
-    content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 4px;
-    background: var(--gradient);
+  .edu-node-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,60,172,0.35);
+    box-shadow: 0 16px 44px rgba(0,0,0,0.35);
   }
-  .edu-card:hover { transform: translateX(6px); border-color: rgba(255,60,172,0.3); }
-  .edu-icon {
-    width:300px; height: 200px;
-    border-radius: 12px;
-    background: rgba(255,60,172,0.1);
-    border: 1px solid rgba(255,60,172,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; flex-shrink: 0;
+  .edu-node-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
   }
-  .edu-icon img {
-  width: 300px;
-  height: 300px;
-  object-fit: contain;
-  border-radius: 6px;
-}
-  .edu-body h3 { font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
-  .edu-inst { font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent3); letter-spacing: 1px; margin-bottom: 10px; }
-  .edu-meta { display: flex; gap: 10px; flex-wrap: wrap; }
-  .edu-badge { font-family: var(--font-mono); font-size: 0.62rem; padding: 3px 10px; border-radius: 100px; letter-spacing: 1px; }
-  .badge-year { background: rgba(0,245,212,0.1); color: var(--accent4); border: 1px solid rgba(0,245,212,0.3); }
-  .badge-stream { background: rgba(254,228,64,0.1); color: var(--accent5); border: 1px solid rgba(254,228,64,0.3); }
-  .edu-cgpa { text-align: right; flex-shrink: 0; }
-  .cgpa-num {
-    font-family: var(--font-head); font-size: 2rem; font-weight: 800;
-    background: var(--gradient);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    line-height: 1;
+  .edu-node-year {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--accent4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
   }
-  .cgpa-label { font-family: var(--font-mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+  .edu-node-card h3 {
+    font-family: var(--font-head);
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  .edu-inst {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent3);
+    letter-spacing: 0.5px;
+  }
+  .edu-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .edu-badge { font-family: var(--font-mono); font-size: 0.62rem; padding: 4px 11px; border-radius: 100px; letter-spacing: 1px; border: 1px solid var(--border); color: var(--muted); }
+  .badge-stream { background: rgba(254,228,64,0.08); color: var(--accent5); border-color: rgba(254,228,64,0.3); }
+
+  .edu-score { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
+  .edu-score svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+  .edu-score circle { fill: none; stroke-width: 5.5; }
+  .edu-score .ring-bg { stroke: var(--border); }
+  .edu-score .ring-fg {
+    stroke: url(#eduRingGradient);
+    stroke-linecap: round;
+    stroke-dasharray: 195.9;
+    stroke-dashoffset: 195.9;
+    transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .edu-score-label {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .edu-score-num { font-family: var(--font-head); font-weight: 800; font-size: 1rem; line-height: 1; }
+  .edu-score-unit { font-family: var(--font-mono); font-size: 0.52rem; color: var(--muted); letter-spacing: 1px; margin-top: 3px; }
 
   @media (max-width: 768px) {
     .hero-stats { display: none; }
@@ -727,8 +799,16 @@
     .form-row { grid-template-columns: 1fr; }
     nav { padding: 16px 5%; }
     .nav-links { gap: 16px; }
-    .edu-card { grid-template-columns: auto 1fr; }
-    .edu-cgpa { display: none; }
+  }
+  @media (max-width: 640px) {
+    .edu-rail { left: 27px; }
+    .edu-node { gap: 16px; }
+    .edu-node-marker { width: 56px; height: 56px; }
+    .edu-node-tier { width: 20px; height: 20px; font-size: 0.62rem; }
+    .edu-node-card { padding: 18px 18px; }
+    .edu-node-top { flex-direction: column; }
+    .edu-score { width: 56px; height: 56px; align-self: flex-start; }
+    .edu-score-num { font-size: 0.85rem; }
   }
   /* Hamburger — hidden on desktop */
 .nav-hamburger { display: none; cursor: pointer !important; z-index: 999; position: relative; pointer-events: auto !important; }
@@ -808,8 +888,8 @@
   width: 100%;
 }
 .hero-photo-ring {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
 }
 .hero-ctas {
   justify-content: center;
@@ -823,10 +903,7 @@
   .skills-grid { grid-template-columns: 1fr; }
   .projects-grid { grid-template-columns: 1fr; }
   .cert-grid { grid-template-columns: 1fr; }
-  .edu-card { grid-template-columns: auto 1fr; gap: 0 16px; padding: 20px; }
-  .edu-cgpa { display: none; }
-  .edu-icon { width: 70px; height: 70px; }
-  .edu-icon img { width: 70px; height: 70px; }
+  .project-thumb { }
   .contact-wrap { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .resume-box { padding: 40px 24px; }
@@ -834,24 +911,23 @@
 
 /* Mobile (max 480px) */
 @media (max-width: 480px) {
-  section { padding: 60px 4%; }
+  section { padding: 50px 4%; }
   .hero-name { font-size: clamp(1.9rem, 9vw, 2.8rem); }
   .hero-role { font-size: 0.8rem; }
   .hero-desc { font-size: 0.88rem; }
   .hero-tag { font-size: 0.65rem; }
   .section-title { font-size: 1.7rem; }
   .skill-card { padding: 20px; }
-  .project-card .project-body { padding: 18px; }
+  .project-card .project-body { padding: 18px;}
   .project-body h3 { font-size: 1rem; }
+  .project-thumb { }
   .cert-card { padding: 16px; flex-direction: column; gap: 10px; }
-  .edu-card { padding: 16px; }
-  .edu-icon { width: 56px; height: 56px; }
-  .edu-icon img { width: 56px; height: 56px; }
-  .edu-body h3 { font-size: 0.9rem; }
   .social-link { font-size: 0.82rem; padding: 8px 10px; }
   .resume-box { padding: 32px 16px; }
   .resume-icon { font-size: 3rem; }
   footer { font-size: 0.65rem; padding: 28px 5%; }
+  .resume-box > div[style] { flex-direction: column; }
+  .resume-box > div[style] a { width: 100%; }
 }
 
 /* Very small phones (max 360px) */
@@ -859,7 +935,15 @@
   .hero-name { font-size: 1.7rem; }
   .btn-primary, .btn-outline { padding: 11px 18px; font-size: 0.82rem; }
   .nav-logo { font-size: 1rem; }
+  .hero-photo-ring { width: 160px; height: 160px; }
 }
+
+/* Hide custom cursor on tablet & mobile widths */
+@media (max-width: 1024px) {
+  .cursor, .cursor-ring { display: none !important; }
+  body { cursor: auto; }
+}
+
 </style>
 </head>
 <body>
@@ -921,7 +1005,7 @@
   <!-- Profile Photo -->
   <div class="hero-photo-wrap">
     <div class="hero-photo-ring">
-      <img src="anurag.jpg" alt="Anurag Yadav" onerror="this.parentElement.style.background='var(--gradient)';this.style.display='none'"/>
+      <img src="anurag.png" alt="Anurag Yadav" onerror="this.parentElement.style.background='var(--gradient)';this.style.display='none'"/>
     </div>
     <div class="hero-photo-badge">📍 Galgotias, Greater Noida</div>
   </div>
@@ -956,60 +1040,105 @@
 <section id="education" style="background: var(--surface);">
   <div class="section-tag">// Academic Background</div>
   <h2 class="section-title">My <span>Education</span></h2>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="eduRingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="var(--accent1)"/>
+        <stop offset="55%" stop-color="var(--accent2)"/>
+        <stop offset="100%" stop-color="var(--accent3)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <div class="edu-timeline reveal">
+    <div class="edu-rail"></div>
 
-    <div class="edu-card">
-      <div class="edu-icon">
-  <img src="galgotia.jpg" alt="School"/>
-</div>
-      <div class="edu-body">
-        <h3>B.Tech — Computer Science & Engineering</h3>
-        <div class="edu-inst">Galgotias College of Engineering and Technology, Greater Noida</div>
+    <div class="edu-node">
+      <div class="edu-node-marker">
+        <div class="edu-node-marker-inner"><img src="galgotia.jpg" alt="Galgotias College logo"/></div>
+        <div class="edu-node-tier" title="Bachelor's Degree">🎓</div>
+      </div>
+      <div class="edu-node-card">
+        <div class="edu-node-top">
+          <div>
+            <span class="edu-node-year">2023 – 2027 · 4th Year</span>
+            <h3>B.Tech — Computer Science &amp; Engineering</h3>
+            <div class="edu-inst">Galgotias College of Engineering and Technology, Greater Noida</div>
+          </div>
+          <div class="edu-score">
+            <svg viewBox="0 0 72 72">
+              <circle class="ring-bg" cx="36" cy="36" r="31.2"/>
+              <circle class="ring-fg" cx="36" cy="36" r="31.2" data-offset="36.05"/>
+            </svg>
+            <div class="edu-score-label">
+              <span class="edu-score-num">8.12</span>
+              <span class="edu-score-unit">CGPA</span>
+            </div>
+          </div>
+        </div>
         <div class="edu-meta">
-          <span class="edu-badge badge-year">2023 – 2027</span>
-          <span class="edu-badge badge-stream">3rd Year</span>
           <span class="edu-badge badge-stream">Full-Time</span>
+          <span class="edu-badge badge-stream">Currently Pursuing</span>
         </div>
-      </div>
-      <div class="edu-cgpa">
-        <div class="cgpa-num">8.16</div>
-        <div class="cgpa-label">CGPA</div>
       </div>
     </div>
 
-    <div class="edu-card">
-      <div class="edu-icon">
-  <img src="shiv school.jpg" alt="School" />
-</div>
-      <div class="edu-body">
-        <h3>Class XII — Science (PCM)</h3>
-        <div class="edu-inst">Shiv Ganga Vidya Mandir — Prayagraj</div>
+    <div class="edu-node">
+      <div class="edu-node-marker">
+        <div class="edu-node-marker-inner"><img src="shiv school.jpg" alt="Shiv Ganga Vidya Mandir logo"/></div>
+        <div class="edu-node-tier" title="Senior Secondary">📘</div>
+      </div>
+      <div class="edu-node-card">
+        <div class="edu-node-top">
+          <div>
+            <span class="edu-node-year">2021 – 2022</span>
+            <h3>Class XII — Science (PCM)</h3>
+            <div class="edu-inst">Shiv Ganga Vidya Mandir — Prayagraj</div>
+          </div>
+          <div class="edu-score">
+            <svg viewBox="0 0 72 72">
+              <circle class="ring-bg" cx="36" cy="36" r="31.2"/>
+              <circle class="ring-fg" cx="36" cy="36" r="31.2" data-offset="38.79"/>
+            </svg>
+            <div class="edu-score-label">
+              <span class="edu-score-num">80.2%</span>
+              <span class="edu-score-unit">SCORE</span>
+            </div>
+          </div>
+        </div>
         <div class="edu-meta">
-          <span class="edu-badge badge-year">2021 – 2022</span>
           <span class="edu-badge badge-stream">CBSE</span>
         </div>
-      </div>
-      <div class="edu-cgpa">
-        <div class="cgpa-num">80.2</div>
-        <div class="cgpa-label">% / Grade</div>
       </div>
     </div>
 
-    <div class="edu-card">
-      <div class="edu-icon">
-  <img src="bbs school.png" alt="School" />
-</div>
-      <div class="edu-body">
-        <h3>Class X</h3>
-        <div class="edu-inst">B.B.S International School — Prayagraj</div>
+    <div class="edu-node">
+      <div class="edu-node-marker">
+        <div class="edu-node-marker-inner"><img src="bbs school.png" alt="B.B.S International School logo"/></div>
+        <div class="edu-node-tier" title="Secondary">✏️</div>
+      </div>
+      <div class="edu-node-card">
+        <div class="edu-node-top">
+          <div>
+            <span class="edu-node-year">2019 – 2020</span>
+            <h3>Class X</h3>
+            <div class="edu-inst">B.B.S International School — Prayagraj</div>
+          </div>
+          <div class="edu-score">
+            <svg viewBox="0 0 72 72">
+              <circle class="ring-bg" cx="36" cy="36" r="31.2"/>
+              <circle class="ring-fg" cx="36" cy="36" r="31.2" data-offset="34.87"/>
+            </svg>
+            <div class="edu-score-label">
+              <span class="edu-score-num">82.2%</span>
+              <span class="edu-score-unit">SCORE</span>
+            </div>
+          </div>
+        </div>
         <div class="edu-meta">
-          <span class="edu-badge badge-year">2019 – 2020</span>
           <span class="edu-badge badge-stream">CBSE</span>
         </div>
-      </div>
-      <div class="edu-cgpa">
-        <div class="cgpa-num">82.2</div>
-        <div class="cgpa-label">% / Grade</div>
       </div>
     </div>
 
@@ -1070,7 +1199,7 @@
   <div class="projects-grid reveal">
     <div class="project-card p1">
       <div class="project-thumb">
-        <div class="project-thumb-inner">🌍</div>
+        <div class="project-thumb-inner"><img src="./wanterlust.png"></div>
         <span class="project-badge badge-live">LIVE</span>
       </div>
       <div class="project-body">
@@ -1090,7 +1219,7 @@
     </div>
     <div class="project-card p2">
       <div class="project-thumb">
-        <div class="project-thumb-inner">🔐</div>
+        <div class="project-thumb-inner"><img src="./SQL.png"></div>
         <span class="project-badge badge-live">LIVE</span>
       </div>
       <div class="project-body">
@@ -1213,7 +1342,7 @@
       <h3>Open to Internships</h3>
       <p>I'm a 3rd year CSE student actively looking for internship opportunities. Whether you have a project, internship offer, or just want to connect — feel free to reach out!</p>
       <div class="contact-socials">
-        <a href="anurag.yadv1905@gmail.com" class="social-link">
+        <a href="mailto:anurag.yadv1905@gmail.com" class="social-link">
           <div class="social-icon">📧</div>
           anurag.yadv1905@gmail.com
         </a>
@@ -1280,22 +1409,36 @@
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
-  });
-  function animRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
-    requestAnimationFrame(animRing);
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (!isTouch) {
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+    });
+    function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+  } else {
+    cursor.style.display = 'none';
+    ring.style.display = 'none';
   }
-  animRing();
 
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.ring-fg').forEach(ring => {
+          const offset = ring.getAttribute('data-offset');
+          if (offset !== null) requestAnimationFrame(() => { ring.style.strokeDashoffset = offset; });
+        });
+      }
+    });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
 
@@ -1371,8 +1514,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 4000);
   }
   // Hamburger nav toggle
-// Hamburger nav toggle
-// Hamburger nav — bulletproof fix
 window.toggleNav = function() {
   const nav = document.getElementById('navLinks');
   const hb = document.getElementById('hamburger');
